@@ -1,0 +1,154 @@
+[
+  {
+    "id": "aws-access-key",
+    "severity": "CRITICAL",
+    "title": "AWS Access Key ID",
+    "pattern": "(?:^|[^A-Z0-9])((AKIA|ASIA)[A-Z0-9]{16})(?:[^A-Z0-9]|$)",
+    "description": "AWS access key found in plaintext",
+    "recommendation": "Rotate this key immediately via AWS IAM console. Use environment variables or AWS SSO."
+  },
+  {
+    "id": "aws-secret-key",
+    "severity": "CRITICAL",
+    "title": "AWS Secret Access Key",
+    "pattern": "(?:aws_secret_access_key|aws_secret|secret_key)\\s*[=:]\\s*['\"]?([A-Za-z0-9/+=]{40})['\"]?",
+    "description": "AWS secret key found in plaintext",
+    "recommendation": "Rotate immediately. Never store AWS secrets in files."
+  },
+  {
+    "id": "gcp-service-account",
+    "severity": "CRITICAL",
+    "title": "GCP Service Account Key",
+    "pattern": "\"type\"\\s*:\\s*\"service_account\"",
+    "description": "Google Cloud service account JSON key file",
+    "recommendation": "Use workload identity federation instead of key files."
+  },
+  {
+    "id": "azure-storage-key",
+    "severity": "CRITICAL",
+    "title": "Azure Storage Account Key",
+    "pattern": "(?:AccountKey|azure[_-]?storage[_-]?key)\\s*[=:]\\s*['\"]?([A-Za-z0-9+/=]{88})['\"]?",
+    "description": "Azure storage key found in plaintext",
+    "recommendation": "Rotate the key and use Managed Identity or SAS tokens."
+  },
+  {
+    "id": "generic-api-key",
+    "severity": "HIGH",
+    "title": "API Key / Token",
+    "pattern": "(?:api[_-]?key|api[_-]?token|apikey)\\s*[=:]\\s*['\"]?([A-Za-z0-9_\\-]{20,})['\"]?",
+    "description": "Generic API key or token found",
+    "recommendation": "Move to environment variable or secret manager."
+  },
+  {
+    "id": "private-key-pem",
+    "severity": "CRITICAL",
+    "title": "Private Key (PEM)",
+    "pattern": "-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----",
+    "description": "Private key found in PEM format",
+    "recommendation": "Ensure key is encrypted with passphrase. Never commit keys to repos."
+  },
+  {
+    "id": "github-token",
+    "severity": "CRITICAL",
+    "title": "GitHub Personal Access Token",
+    "pattern": "(ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{82}|gho_[A-Za-z0-9]{36}|ghu_[A-Za-z0-9]{36}|ghs_[A-Za-z0-9]{36}|ghr_[A-Za-z0-9]{36})",
+    "description": "GitHub token found in plaintext",
+    "recommendation": "Revoke at github.com/settings/tokens and regenerate."
+  },
+  {
+    "id": "slack-token",
+    "severity": "HIGH",
+    "title": "Slack Token",
+    "pattern": "(xox[boaprs]-[A-Za-z0-9\\-]{10,})",
+    "description": "Slack API token found",
+    "recommendation": "Revoke at api.slack.com and use environment variables."
+  },
+  {
+    "id": "stripe-key",
+    "severity": "CRITICAL",
+    "title": "Stripe Secret Key",
+    "pattern": "(sk_live_[A-Za-z0-9]{20,})",
+    "description": "Stripe live secret key — can charge real money",
+    "recommendation": "Rotate immediately at dashboard.stripe.com/apikeys."
+  },
+  {
+    "id": "discord-token",
+    "severity": "HIGH",
+    "title": "Discord Bot Token",
+    "pattern": "((?:mfa\\.[A-Za-z0-9_-]{84})|(?:[A-Za-z0-9_-]{24}\\.[A-Za-z0-9_-]{6}\\.[A-Za-z0-9_-]{27,}))",
+    "description": "Discord bot or user token found",
+    "recommendation": "Regenerate at discord.com/developers."
+  },
+  {
+    "id": "database-url",
+    "severity": "HIGH",
+    "title": "Database Connection String",
+    "pattern": "(?:mongodb|postgres|postgresql|mysql|redis|amqp)://[^\\s'\"]{10,}",
+    "description": "Database connection string with potential credentials",
+    "recommendation": "Use environment variables for connection strings."
+  },
+  {
+    "id": "password-in-config",
+    "severity": "HIGH",
+    "title": "Password in Configuration",
+    "pattern": "(?:password|passwd|pwd|secret)\\s*[=:]\\s*['\"]([^'\"]{8,})['\"]",
+    "description": "Password or secret found in configuration file",
+    "recommendation": "Use a secret manager or environment variables."
+  },
+  {
+    "id": "jwt-token",
+    "severity": "MEDIUM",
+    "title": "JWT Token",
+    "pattern": "eyJ[A-Za-z0-9_-]{10,}\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}",
+    "description": "JSON Web Token found — may contain sensitive claims",
+    "recommendation": "Check expiration. Remove if stale."
+  },
+  {
+    "id": "openai-key",
+    "severity": "HIGH",
+    "title": "OpenAI API Key",
+    "pattern": "(sk-[A-Za-z0-9]{20,})",
+    "description": "OpenAI API key found",
+    "recommendation": "Rotate at platform.openai.com/api-keys."
+  },
+  {
+    "id": "sendgrid-key",
+    "severity": "HIGH",
+    "title": "SendGrid API Key",
+    "pattern": "(SG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43})",
+    "description": "SendGrid API key found",
+    "recommendation": "Rotate at app.sendgrid.com/settings/api_keys."
+  },
+  {
+    "id": "twilio-key",
+    "severity": "HIGH",
+    "title": "Twilio API Key",
+    "pattern": "(SK[a-f0-9]{32})",
+    "description": "Twilio API key found",
+    "recommendation": "Rotate at twilio.com/console."
+  },
+  {
+    "id": "telegram-bot-token",
+    "severity": "HIGH",
+    "title": "Telegram Bot Token",
+    "pattern": "(\\d{8,10}:[A-Za-z0-9_-]{35})",
+    "description": "Telegram bot token found",
+    "recommendation": "Revoke via @BotFather on Telegram."
+  },
+  {
+    "id": "heroku-key",
+    "severity": "HIGH",
+    "title": "Heroku API Key",
+    "pattern": "(?:heroku[_-]?api[_-]?key)\\s*[=:]\\s*['\"]?([a-f0-9-]{36})['\"]?",
+    "description": "Heroku API key found",
+    "recommendation": "Regenerate at dashboard.heroku.com/account."
+  },
+  {
+    "id": "env-secret",
+    "severity": "MEDIUM",
+    "title": "Secret in .env File",
+    "pattern": "(?:SECRET|TOKEN|KEY|PASSWORD|CREDENTIAL|AUTH)[A-Z_]*\\s*=\\s*['\"]?([^\\s'\"#]{8,})['\"]?",
+    "description": "Potential secret found in environment file",
+    "recommendation": "Ensure .env is in .gitignore and not in version control."
+  }
+]
